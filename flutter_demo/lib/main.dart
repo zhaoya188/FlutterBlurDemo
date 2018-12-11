@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'dart:ui' as ui;
 
+import 'myhtttp.dart' as list;
+
 ///
 /// 一个BackdropFilter高斯模糊的例子
 /// Refs: https://gist.github.com/collinjackson/4318255c6390f080f91011329a068d62
@@ -34,8 +36,8 @@ class _HomePageState extends State<BlurWidget> {
         //   color: Colors.blue.withOpacity(_opacity),
         //   shape: BoxShape.circle,
         // ),
-        width: 90.0,
-        height: 90.0,
+        width: 200.0,
+        height: 200.0,
         child: new Center(
           child: _showText ? new Text('Test') : null,
         ),
@@ -67,19 +69,48 @@ class _HomePageState extends State<BlurWidget> {
         test = new ClipRect(child: test);
         break;
     }
-    test = new Container(
-      height: 200.0,
+
+    Widget background = new Container(
+      height: 180.0,
       margin: new EdgeInsets.all(10.0),
       decoration: new BoxDecoration(
           image: new DecorationImage(
-        fit: BoxFit.cover,
-        image: new NetworkImage(
-            'https://github.com/zhaoya188/res/raw/master/img/blurbg.png'),
-      )),
+            fit: BoxFit.cover,
+            image: AssetImage("images/blurbg.jpg"),
+            //image: new NetworkImage(
+            //    'https://github.com/zhaoya188/res/raw/master/img/blurbg.jpg'),
+          )),
       child: new Center(
-        child: test,
+        child: null,
       ),
     );
+
+    background = Container(
+      height: 400,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          background,
+          Expanded(
+            child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 10.0),
+                child:
+                list.HttpPage()), //MaterialButton(color: Colors.green,),)
+          ),
+        ],
+      ),
+    );
+
+    test = Container(
+      child: Stack(
+        alignment: Alignment.center,
+        children: <Widget>[
+          background,
+          test,
+        ],
+      ),
+    );
+
     return new Scaffold(
       appBar: new AppBar(
         title: new Text('BackdropFilter Test'),
@@ -95,7 +126,7 @@ class _HomePageState extends State<BlurWidget> {
                   title: new Text('Sigma'),
                   subtitle: new Slider(
                     min: 0.0,
-                    max: 50.0,
+                    max: 10.0,
                     value: _sigma,
                     onChanged: (double value) {
                       setState(() {
